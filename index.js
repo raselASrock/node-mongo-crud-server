@@ -1,3 +1,4 @@
+// const { MongoClient, ServerApiVersion } = require('mongodb');
 const express = require("express");
 const cors = require('cors');
 const app = express();
@@ -8,13 +9,51 @@ const port = process.env.port || 5000;
 app.use(cors());
 app.use(express.json());
 
+// user: mondoDBUser1
+// pass: OOSnHJDCBbcIWPbP
+
+
+
+
+
+
+// const uri = "mongodb+srv://mondoDBUser1:OOSnHJDCBbcIWPbP@cluster1.yyonl1x.mongodb.net/?authSource=admin";
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://mondoDBUser1:OOSnHJDCBbcIWPbP@cluster1.yyonl1x.mongodb.net/?authSource=admin";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+// client.connect(err => {
+//   const collection = client.db("test").collection("devices");
+//   // perform actions on the collection object
+//   client.close();
+// });
+
+
+async function run(){
+    try{
+      const userCollection = client.db('Node-Mongo-Crud').collection('users')
+      
+      app.post('/users', async (req, res) =>{
+          const user = req.body;
+          console.log(user);
+          const result = await userCollection.insertOne(user);
+          res.send(result)
+      })
+    }
+    catch(err){
+      console.log(err);
+    }
+    finally{
+
+    }
+}
+run().catch(error => console.log(error))
+
+
 
 // async await
-async function run(){
 
-}
-
-run().catch(err => console.log(err))
 
 app.get("/", (req, res) =>{
     res.send("Hello from mongo crud server....");
