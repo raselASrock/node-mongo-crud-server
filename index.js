@@ -20,7 +20,7 @@ app.use(express.json());
 // const uri = "mongodb+srv://mondoDBUser1:OOSnHJDCBbcIWPbP@cluster1.yyonl1x.mongodb.net/?authSource=admin";
 // const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://mondoDBUser1:OOSnHJDCBbcIWPbP@cluster1.yyonl1x.mongodb.net/?authSource=admin";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 // client.connect(err => {
@@ -47,6 +47,16 @@ async function run(){
           const result = await userCollection.insertOne(user);
           res.send(result)
       })
+
+      app.delete('/users/:id', async(req, res) =>{
+        const id = req.params.id;
+        const query = {_id: ObjectId(id)}
+        const result = await userCollection.deleteOne(query)
+        console.log('Trying to delete',id)
+        console.log(result);
+        res.send(result)
+
+      });
     }
     catch(err){
       console.log(err);
